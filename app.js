@@ -1,30 +1,34 @@
 var spoilers = document.querySelectorAll('.spoiler')
 
-
-for(var i=0; i< spoilers.length ; i++) {
-    
-    var spoil = spoilers[i]
-    //  debugger    
-    var parent = spoil.parentElement
-
+var createButton = function(content) {
     var button = document.createElement('button')
-    button.textContent = "Show the Spoiler"
-    var  p = document.createElement('p')
-    // p.appendChild(button)
-    var spoilerCopy = spoil.cloneNode(true)
-    parent.insertBefore(button, spoil)
-    spoil.remove();
+    button.textContent = content
+    return button
+}
 
-    (function(spoilerCopy) {
+var affectButton = function(button, spoilElement) {
+    (function(spoilElement) {
         button.addEventListener('click', function(e) { 
             var parentButton = this.parentElement
-            console.log(typeof(spoilerCopy))
-            parentButton.insertBefore(spoilerCopy.cloneNode(true), this)   
+            parentButton.insertBefore(spoilElement.cloneNode(true), this)   
             this.remove()
             e.preventDefault()
             
         })
-    })(spoilerCopy)
+    })(spoilElement)
+}
 
+var createSpoilerButton = function(spoil) {
+    var parent = spoil.parentElement
+        var button = createButton("Show the Spoiler")
+        var spoilerCopy = spoil.cloneNode(true)
+        parent.insertBefore(button, spoil)
+        spoil.remove()
+        affectButton(button, spoilerCopy)
+}
+
+for(var i=0; i< spoilers.length ; i++) {
+    var spoil = spoilers[i]
+    createSpoilerButton(spoil)
     
 }
